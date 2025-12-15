@@ -123,7 +123,14 @@ const ExpensesPage = () => {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-3" style={{ marginBottom: 'var(--spacing-xl)' }}>
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: 'var(--spacing-lg)',
+                    marginBottom: 'var(--spacing-xl)'
+                }}
+            >
                 <div className="card">
                     <div className="flex items-center gap-md">
                         <div style={{

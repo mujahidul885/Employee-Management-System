@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -29,11 +29,11 @@ const MainLayout = ({ children }) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
     // Handle window resize
-    useState(() => {
+    useEffect(() => {
         const handleResize = () => {
             const mobile = window.innerWidth <= 1024;
             setIsMobile(mobile);
-            if (!mobile && !sidebarOpen) {
+            if (!mobile) {
                 setSidebarOpen(true);
             }
         };
@@ -41,6 +41,18 @@ const MainLayout = ({ children }) => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    // Lock body scroll when mobile sidebar is open
+    useEffect(() => {
+        if (isMobile && sidebarOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMobile, sidebarOpen]);
 
     const handleLogout = () => {
         logout();
@@ -72,7 +84,7 @@ const MainLayout = ({ children }) => {
     );
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
             {/* Mobile Overlay */}
             {isMobile && sidebarOpen && (
                 <div
@@ -81,8 +93,9 @@ const MainLayout = ({ children }) => {
                         position: 'fixed',
                         inset: 0,
                         background: 'rgba(0, 0, 0, 0.5)',
-                        zIndex: 99,
-                        animation: 'fadeIn 0.2s ease-in-out'
+                        zIndex: 999, // High z-index to ensure coverage
+                        animation: 'fadeIn 0.2s ease-in-out',
+                        backdropFilter: 'blur(4px)' // Added blur effect
                     }}
                 />
             )}
@@ -95,10 +108,12 @@ const MainLayout = ({ children }) => {
                 borderRight: '1px solid rgba(255, 255, 255, 0.3)',
                 transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 position: 'fixed',
+                top: 0,
+                left: 0,
                 height: '100vh',
                 overflowY: 'auto',
                 overflowX: 'hidden',
-                zIndex: 100,
+                zIndex: 1000, // Higher than overlay
                 boxShadow: 'var(--shadow-lg)',
                 transform: isMobile ? (sidebarOpen ? 'translateX(0)' : 'translateX(-100%)') : 'translateX(0)',
                 willChange: isMobile ? 'transform' : 'width',

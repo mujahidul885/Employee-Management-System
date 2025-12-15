@@ -113,7 +113,14 @@ const LeavePage = () => {
             </div>
 
             {/* Leave Balance Cards */}
-            <div className="grid grid-4" style={{ marginBottom: 'var(--spacing-xl)' }}>
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                    gap: 'var(--spacing-lg)',
+                    marginBottom: 'var(--spacing-xl)'
+                }}
+            >
                 <div className="card">
                     <div className="flex items-center gap-md">
                         <div style={{
@@ -282,40 +289,42 @@ const LeavePage = () => {
                 <h3 style={{ marginBottom: 'var(--spacing-lg)' }}>Leave Requests</h3>
 
                 {leaveRequests.length > 0 ? (
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Days</th>
-                                <th>Reason</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {leaveRequests.slice().reverse().map(request => (
-                                <tr key={request.id}>
-                                    <td>
-                                        <span className="badge badge-primary">
-                                            {request.type}
-                                        </span>
-                                    </td>
-                                    <td>{formatDate(request.startDate)}</td>
-                                    <td>{formatDate(request.endDate)}</td>
-                                    <td>{request.days}</td>
-                                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                        {request.reason}
-                                    </td>
-                                    <td>
-                                        <span className={`badge ${getStatusBadge(request.status)}`}>
-                                            {request.status}
-                                        </span>
-                                    </td>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Days</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {leaveRequests.slice().reverse().map(request => (
+                                    <tr key={request.id}>
+                                        <td>
+                                            <span className="badge badge-primary">
+                                                {request.type}
+                                            </span>
+                                        </td>
+                                        <td>{formatDate(request.startDate)}</td>
+                                        <td>{formatDate(request.endDate)}</td>
+                                        <td>{request.days}</td>
+                                        <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                            {request.reason}
+                                        </td>
+                                        <td>
+                                            <span className={`badge ${getStatusBadge(request.status)}`}>
+                                                {request.status}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 ) : (
                     <p className="text-center text-muted">No leave requests found</p>
                 )}

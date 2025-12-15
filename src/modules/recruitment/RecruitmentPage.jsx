@@ -140,7 +140,14 @@ const RecruitmentPage = () => {
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-4" style={{ marginBottom: 'var(--spacing-xl)' }}>
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(135px, 1fr))',
+                    gap: 'var(--spacing-md)',
+                    marginBottom: 'var(--spacing-xl)'
+                }}
+            >
                 <div className="card">
                     <div className="flex items-center gap-md">
                         <div style={{
@@ -332,7 +339,7 @@ const RecruitmentPage = () => {
                                         borderLeft: '4px solid var(--primary-500)'
                                     }}
                                 >
-                                    <div className="flex items-start justify-between">
+                                    <div className="flex flex-col md:flex-row items-start justify-between gap-md">
                                         <div style={{ flex: 1 }}>
                                             <div className="flex items-center gap-md" style={{ marginBottom: 'var(--spacing-sm)' }}>
                                                 <h4 style={{ margin: 0 }}>{job.title}</h4>
@@ -341,7 +348,7 @@ const RecruitmentPage = () => {
                                                     {statusBadge.text}
                                                 </span>
                                             </div>
-                                            <div className="flex gap-lg" style={{ marginBottom: 'var(--spacing-sm)' }}>
+                                            <div className="flex flex-wrap gap-md md:gap-lg" style={{ marginBottom: 'var(--spacing-sm)' }}>
                                                 <span className="text-sm text-muted">📍 {job.location || 'Remote'}</span>
                                                 <span className="text-sm text-muted">🏢 {job.department}</span>
                                                 <span className="text-sm text-muted">⏰ {job.type}</span>
@@ -350,7 +357,7 @@ const RecruitmentPage = () => {
                                                 {job.description || 'No description provided'}
                                             </p>
                                         </div>
-                                        <div className="text-right">
+                                        <div className="text-left md:text-right w-full md:w-auto mt-sm md:mt-0">
                                             <p className="text-sm text-muted" style={{ margin: 0 }}>
                                                 Posted: {formatDate(job.postedDate)}
                                             </p>

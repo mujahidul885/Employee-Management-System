@@ -113,7 +113,14 @@ const PerformancePage = () => {
             </div>
 
             {/* KPI Cards */}
-            <div className="grid grid-4" style={{ marginBottom: 'var(--spacing-xl)' }}>
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                    gap: 'var(--spacing-lg)',
+                    marginBottom: 'var(--spacing-xl)'
+                }}
+            >
                 {sampleKPIs.map((kpi, index) => {
                     const achievement = (kpi.current / kpi.target) * 100;
                     return (

@@ -241,32 +241,34 @@ const AttendancePage = () => {
                 <h3 style={{ marginBottom: 'var(--spacing-lg)' }}>Attendance History</h3>
 
                 {attendance.length > 0 ? (
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Check In</th>
-                                <th>Check Out</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {attendance.slice().reverse().slice(0, 10).map(record => (
-                                <tr key={record.id}>
-                                    <td>{formatDate(record.date)}</td>
-                                    <td>{record.checkIn || '-'}</td>
-                                    <td>{record.checkOut || '-'}</td>
-                                    <td>
-                                        <span className={`badge badge-${record.status === 'present' ? 'success' :
-                                                record.status === 'late' ? 'warning' : 'danger'
-                                            }`}>
-                                            {record.status}
-                                        </span>
-                                    </td>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Status</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {attendance.slice().reverse().slice(0, 10).map(record => (
+                                    <tr key={record.id}>
+                                        <td>{formatDate(record.date)}</td>
+                                        <td>{record.checkIn || '-'}</td>
+                                        <td>{record.checkOut || '-'}</td>
+                                        <td>
+                                            <span className={`badge badge-${record.status === 'present' ? 'success' :
+                                                record.status === 'late' ? 'warning' : 'danger'
+                                                }`}>
+                                                {record.status}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 ) : (
                     <p className="text-center text-muted">No attendance records found</p>
                 )}

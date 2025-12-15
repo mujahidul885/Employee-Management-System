@@ -329,13 +329,19 @@ const SettingsPage = () => {
                                             justifyContent: 'space-between',
                                             padding: 'var(--spacing-md)',
                                             background: 'var(--neutral-50)',
-                                            borderRadius: 'var(--radius-md)'
+                                            borderRadius: 'var(--radius-md)',
+                                            gap: 'var(--spacing-md)'
                                         }}
                                     >
                                         <span className="font-semibold">{dept.name}</span>
                                         <button
                                             className="btn btn-sm btn-danger"
-                                            style={{ padding: '0.25rem 0.5rem' }}
+                                            style={{
+                                                padding: '0.25rem 0.5rem',
+                                                width: 'auto',
+                                                flexShrink: 0,
+                                                flexGrow: 0
+                                            }}
                                             onClick={() => handleDeleteDepartment(dept.id, dept.name)}
                                         >
                                             <Trash2 size={14} />
@@ -389,13 +395,19 @@ const SettingsPage = () => {
                                             justifyContent: 'space-between',
                                             padding: 'var(--spacing-md)',
                                             background: 'var(--neutral-50)',
-                                            borderRadius: 'var(--radius-md)'
+                                            borderRadius: 'var(--radius-md)',
+                                            gap: 'var(--spacing-md)'
                                         }}
                                     >
                                         <span className="font-semibold">{desig.name}</span>
                                         <button
                                             className="btn btn-sm btn-danger"
-                                            style={{ padding: '0.25rem 0.5rem' }}
+                                            style={{
+                                                padding: '0.25rem 0.5rem',
+                                                width: 'auto',
+                                                flexShrink: 0,
+                                                flexGrow: 0
+                                            }}
                                             onClick={() => handleDeleteDesignation(desig.id, desig.name)}
                                         >
                                             <Trash2 size={14} />

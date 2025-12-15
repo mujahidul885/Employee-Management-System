@@ -259,9 +259,10 @@ const ShiftPage = () => {
 
             {/* Weekly Roster */}
             <div className="card">
-                <h3 className="mb-4">Weekly Roster</h3> {/* Reduced h3 margin */}
+                <h3 className="mb-3 text-sm font-semibold">Weekly Roster</h3>
 
-                <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                {/* Desktop Table */}
+                <div className="hidden md:block" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
                     <table className="table" style={{ minWidth: '700px' }}>
                         <thead>
                             <tr>
@@ -270,33 +271,30 @@ const ShiftPage = () => {
                                     position: 'sticky',
                                     left: 0,
                                     background: 'var(--bg-card)',
-                                    zIndex: 1,
-                                    boxShadow: '2px 0 2px -2px rgba(0,0,0,0.1)'
+                                    zIndex: 2,
+                                    boxShadow: '2px 0 2px -2px rgba(0,0,0,0.08)'
                                 }}>
                                     Employee
                                 </th>
                                 {weekDays.map((day, idx) => (
                                     <th key={idx} style={{ minWidth: '90px', textAlign: 'center' }}>
-                                        <span className="font-semibold text-sm">{day}</span>
-                                        <br />
-                                        <span className="text-xs font-normal text-muted"> {/* Smaller date text */}
-                                            {new Date(weekDates[idx]).getDate()}
-                                        </span>
+                                        <div className="font-semibold text-sm">{day}</div>
+                                        <div className="text-xs text-muted">{new Date(weekDates[idx]).getDate()}</div>
                                     </th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {employees.slice(0, 10).map(employee => (
+                            {employees.slice(0, 50).map(employee => (
                                 <tr key={employee.id}>
                                     <td style={{
                                         position: 'sticky',
                                         left: 0,
                                         background: 'var(--bg-card)',
                                         zIndex: 1,
-                                        boxShadow: '2px 0 2px -2px rgba(0,0,0,0.1)'
+                                        boxShadow: '2px 0 2px -2px rgba(0,0,0,0.06)'
                                     }}>
-                                        <div className="py-2"> {/* Added vertical padding to sticky cell for height */}
+                                        <div className="py-2">
                                             <div className="font-semibold text-sm">
                                                 {employee.firstName} {employee.lastName}
                                             </div>
@@ -305,20 +303,21 @@ const ShiftPage = () => {
                                             </div>
                                         </div>
                                     </td>
+
                                     {weekDates.map((date, idx) => {
                                         const shift = getShiftForEmployeeOnDate(employee.id, date);
                                         const template = shift ? getShiftTemplate(shift.shiftType) : null;
 
                                         return (
-                                            <td key={idx} style={{ padding: '0.3rem' }}>
+                                            <td key={idx} style={{ padding: '0.35rem', verticalAlign: 'middle' }}>
                                                 {shift && template ? (
                                                     <div style={{
-                                                        padding: '0.3rem',
+                                                        padding: '0.4rem',
                                                         background: template.color + '20',
                                                         borderLeft: `3px solid ${template.color}`,
-                                                        borderRadius: 'var(--radius-sm)',
-                                                        fontSize: '0.7rem',
-                                                        minHeight: '40px', // Ensure consistent cell height for shifts
+                                                        borderRadius: '6px',
+                                                        fontSize: '0.75rem',
+                                                        minHeight: '40px',
                                                         display: 'flex',
                                                         flexDirection: 'column',
                                                         justifyContent: 'center',
@@ -328,14 +327,12 @@ const ShiftPage = () => {
                                                         <div className="font-semibold" style={{ color: template.color }}>
                                                             {template.name.split(' ')[0]}
                                                         </div>
-                                                        <div style={{ fontSize: '0.6rem', color: 'var(--neutral-600)' }}>
+                                                        <div style={{ fontSize: '0.65rem', color: 'var(--neutral-600)' }}>
                                                             {template.time.split(' - ')[0]}
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    <div className="text-center text-muted text-xs py-2">
-                                                        -
-                                                    </div>
+                                                    <div className="text-center text-muted text-xs py-2">-</div>
                                                 )}
                                             </td>
                                         );
@@ -346,11 +343,13 @@ const ShiftPage = () => {
                     </table>
                 </div>
 
-                {employees.length === 0 && (
-                    <p className="text-center text-muted mt-4">No employees found</p>
-                )}
-            </div>
-        </div>
+                {
+                    employees.length === 0 && (
+                        <p className="text-center text-muted mt-4">No employees found</p>
+                    )
+                }
+            </div >
+        </div >
     );
 };
 

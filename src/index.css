@@ -623,11 +623,7 @@ a:hover {
   }
 
   /* Table adjustments - make scrollable */
-  .table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
+  /* Conflicting rule removed to allow hidden class to work */
 
   .table th,
   .table td {
@@ -914,5 +910,69 @@ a:hover {
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
+  }
+}
+
+/* Visibility Utilities (Tailwind-like) */
+.hidden {
+  display: none !important;
+}
+
+.block {
+  display: block !important;
+}
+
+/* Base Flex Utilities */
+.flex-col {
+  flex-direction: column !important;
+}
+
+.flex-row {
+  flex-direction: row !important;
+}
+
+/* Sizing Utilities */
+.w-full {
+  width: 100% !important;
+}
+
+/* Typography Utilities */
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+/* Spacing Utilities */
+.mt-sm {
+  margin-top: var(--spacing-sm) !important;
+}
+
+/* Responsive Overrides (Desktop) */
+@media (min-width: 768px) {
+  .md\:hidden {
+    display: none !important;
+  }
+
+  .md\:block {
+    display: block !important;
+  }
+
+  .md\:flex-row {
+    flex-direction: row !important;
+  }
+
+  .md\:w-auto {
+    width: auto !important;
+  }
+
+  .md\:text-right {
+    text-align: right !important;
+  }
+
+  .md\:mt-0 {
+    margin-top: 0 !important;
   }
 }

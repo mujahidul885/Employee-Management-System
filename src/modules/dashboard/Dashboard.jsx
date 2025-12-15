@@ -73,7 +73,14 @@ const Dashboard = () => {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-4" style={{ marginBottom: 'var(--spacing-2xl)' }}>
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                    gap: 'var(--spacing-lg)',
+                    marginBottom: 'var(--spacing-2xl)'
+                }}
+            >
                 {statCards.map((stat, index) => {
                     const Icon = stat.icon;
                     return (
