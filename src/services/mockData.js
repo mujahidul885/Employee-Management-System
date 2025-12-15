@@ -3,12 +3,28 @@ import { DEPARTMENTS, DESIGNATIONS, SKILLS, ROLES } from '../constants';
 
 // Initialize mock data
 export const initializeMockData = () => {
-    // Check if data already exists
-    if (storage.get('users')) {
+    // Check if we've already cleaned the data for the "Remove All" request
+    // If 'data_cleaned' is present, we respect the current state (persistence)
+    if (storage.get('data_cleaned')) {
         return;
     }
 
-    // Create admin user
+    // --- HARD RESET START ---
+    console.log('Performing Hard Data Reset...');
+
+    // Clear all existing data keys
+    const keysToClear = [
+        'users', 'expenses', 'shifts', 'attendance', 'leaveRequests',
+        'leaveBalances', 'jobPostings', 'candidates', 'courses', 'auditLogs'
+        // We can keep companySettings, departments, designations if desired, 
+        // but "Remove ALL" suggests a total wipe. 
+        // I'll keep the Configs as they are usually static, but will reset Users/Transactions.
+    ];
+
+    // Actually, to be safe and thorough, let's overwrite the Users list directly 
+    // rather than relying on storage.removeItem() in case we miss something.
+
+    // 1. Create ONLY Admin User
     const adminUser = {
         id: generateId(),
         email: 'admin@hrms.com',
@@ -25,111 +41,10 @@ export const initializeMockData = () => {
         permissions: ['all']
     };
 
-    // Create sample employees
-    const employees = [
-        {
-            id: generateId(),
-            email: 'john.doe@hrms.com',
-            password: 'employee123',
-            role: ROLES.EMPLOYEE,
-            firstName: 'John',
-            lastName: 'Doe',
-            phone: '9876543211',
-            department: 'Engineering',
-            designation: 'Senior Software Engineer',
-            dateOfBirth: '1990-03-20',
-            joiningDate: '2021-06-15',
-            skills: ['JavaScript', 'React', 'Node.js'],
-            avatar: null,
-            emergencyContact: {
-                name: 'Jane Doe',
-                relationship: 'Spouse',
-                phone: '9876543212'
-            },
-            address: {
-                street: '123 Main St',
-                city: 'Mumbai',
-                state: 'Maharashtra',
-                pincode: '400001'
-            },
-            salary: {
-                basic: 50000,
-                hra: 20000,
-                transport: 5000,
-                medical: 3000
-            }
-        },
-        {
-            id: generateId(),
-            email: 'sarah.smith@hrms.com',
-            password: 'employee123',
-            role: ROLES.MANAGER,
-            firstName: 'Sarah',
-            lastName: 'Smith',
-            phone: '9876543213',
-            department: 'Engineering',
-            designation: 'Engineering Manager',
-            dateOfBirth: '1988-07-12',
-            joiningDate: '2020-03-10',
-            skills: ['Leadership', 'Project Management', 'JavaScript'],
-            avatar: null,
-            emergencyContact: {
-                name: 'Mike Smith',
-                relationship: 'Spouse',
-                phone: '9876543214'
-            }
-        },
-        {
-            id: generateId(),
-            email: 'mike.wilson@hrms.com',
-            password: 'employee123',
-            role: ROLES.EMPLOYEE,
-            firstName: 'Mike',
-            lastName: 'Wilson',
-            phone: '9876543215',
-            department: 'Marketing',
-            designation: 'Marketing Manager',
-            dateOfBirth: '1992-11-05',
-            joiningDate: '2022-01-20',
-            skills: ['Marketing Strategy', 'Communication', 'Data Analysis'],
-            avatar: null
-        },
-        {
-            id: generateId(),
-            email: 'emily.brown@hrms.com',
-            password: 'employee123',
-            role: ROLES.EMPLOYEE,
-            firstName: 'Emily',
-            lastName: 'Brown',
-            phone: '9876543216',
-            department: 'Finance',
-            designation: 'Finance Manager',
-            dateOfBirth: '1989-02-28',
-            joiningDate: '2021-09-01',
-            skills: ['Data Analysis', 'Problem Solving'],
-            avatar: null
-        },
-        {
-            id: generateId(),
-            email: 'david.lee@hrms.com',
-            password: 'employee123',
-            role: ROLES.EMPLOYEE,
-            firstName: 'David',
-            lastName: 'Lee',
-            phone: '9876543217',
-            department: 'Engineering',
-            designation: 'Software Engineer',
-            dateOfBirth: '1995-09-18',
-            joiningDate: '2023-02-15',
-            skills: ['Python', 'Java', 'SQL'],
-            avatar: null
-        }
-    ];
-
-    const allUsers = [adminUser, ...employees];
+    const allUsers = [adminUser]; // NO sample employees
     storage.set('users', allUsers);
 
-    // Initialize company settings
+    // 2. Initialize Company Settings (Standard Defaults)
     const companySettings = {
         name: 'TechCorp Solutions',
         email: 'info@techcorp.com',
@@ -145,33 +60,31 @@ export const initializeMockData = () => {
     };
     storage.set('companySettings', companySettings);
 
-    // Initialize departments
+    // 3. Initialize Departments (Standard Defaults)
     storage.set('departments', DEPARTMENTS.map(dept => ({
         id: generateId(),
         name: dept,
         createdAt: new Date().toISOString()
     })));
 
-    // Initialize designations
+    // 4. Initialize Designations (Standard Defaults)
     storage.set('designations', DESIGNATIONS.map(desig => ({
         id: generateId(),
         name: desig,
         createdAt: new Date().toISOString()
     })));
 
-    // Initialize leave balances for all employees
-    const leaveBalances = allUsers
-        .filter(u => u.role !== ROLES.ADMIN)
-        .map(user => ({
-            userId: user.id,
-            sick: 12,
-            casual: 12,
-            paid: 18,
-            unpaid: 0
-        }));
+    // 5. Initialize Leave Balances (Admin only)
+    const leaveBalances = [{
+        userId: adminUser.id,
+        sick: 12,
+        casual: 12,
+        paid: 18,
+        unpaid: 0
+    }];
     storage.set('leaveBalances', leaveBalances);
 
-    // Initialize holidays for 2025
+    // 6. Initialize Holidays (Keep these as they are useful)
     const holidays = [
         { id: generateId(), name: 'Republic Day', date: '2025-01-26', type: 'national' },
         { id: generateId(), name: 'Holi', date: '2025-03-14', type: 'festival' },
@@ -183,17 +96,20 @@ export const initializeMockData = () => {
     ];
     storage.set('holidays', holidays);
 
-    // Initialize empty arrays for other data
+    // 7. Clear All Transactional Data (Empty Arrays)
     storage.set('attendance', []);
     storage.set('leaveRequests', []);
     storage.set('shifts', []);
-    storage.set('expenses', []);
+    storage.set('expenses', []); // Already cleared previously, but ensuring it here
     storage.set('jobPostings', []);
     storage.set('candidates', []);
     storage.set('courses', []);
     storage.set('auditLogs', []);
 
-    console.log('Mock data initialized successfully!');
+    console.log('Data Cleaned: Admin Only mode initialized.');
+
+    // Mark as cleaned so we don't wipe it again on next reload (allowing new data to persist)
+    storage.set('data_cleaned', true);
 };
 
 // Get all users
